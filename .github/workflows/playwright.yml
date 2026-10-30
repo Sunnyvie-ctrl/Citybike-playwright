@@ -15,3 +15,26 @@ jobs:
       # TODO: install Playwright Chromium and system dependencies
       # TODO: execute tests; a failing test must fail the job
       # TODO: upload the HTML report even when tests fail
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: run Playwright E2E tests
+        run: npx playwright test
+
+      - name: Upload HTML Test Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
